@@ -78,7 +78,6 @@ def run():
                 
 
 if __name__ == '__main__':
-    
     with open('transacciones.csv', 'r') as f:
         reader = csv.reader(f)
         for idx, row in enumerate(reader):
