@@ -5,7 +5,7 @@ from datetime import *
 
 
 def run():
-    
+    transaction = Transactions()
     now = datetime.now()
     fecha = now.strftime('%d/%m/%Y Hora: %H:%M:%S')
     while True:
@@ -34,6 +34,7 @@ def run():
                 coin = str(input("Indique la moneda que va a recibir: "))
                 count = float(input('Indique la cantidad de dinero que desea recibir: '))
                 code = input('Indique el codigo de quien envia: ')
+                transaction.typeTransaction(code, "receives", fecha, coin, count)
                 
                 os.system("pause")
                 
@@ -65,8 +66,9 @@ def run():
                         |     MOSTRAR HISTORICO DE TRANSACCIONES      |        
                         |*********************************************|
                     \n''')
-                
+                transaction.show_all()
                 os.system("pause")
+                
             elif option == '6':
                 print('Saliendo...')
                 break
@@ -76,4 +78,10 @@ def run():
                 
 
 if __name__ == '__main__':
+    
+    with open('transacciones.csv', 'r') as f:
+        reader = csv.reader(f)
+        for idx, row in enumerate(reader):
+            if idx == 0:
+                continue  
     run()
