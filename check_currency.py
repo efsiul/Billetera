@@ -2,7 +2,6 @@ import requests
 
 class Check_currency:
     
-   
     COINMARKET_API_KEY = "d4e571f9-65a3-46c7-af2b-310417d2e144"
     headers = {'Accepts': 'application/json','X-CMC_PRO_API_KEY': COINMARKET_API_KEY}   
     

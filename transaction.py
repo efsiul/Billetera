@@ -1,31 +1,5 @@
 import csv
 from check_currency import *
-class Monto:
-    monto=0.0
-        
-        
-    def __init__(self, amount=0.0, trans=0):
-        self.__amount=amount
-        self.__trans=trans
-        
-        
-    @property
-    def amount(self):
-        return self.__amount
-        
-    @amount.setter
-    def amount(self, amount):
-        self.__amount=amount
-    
-    @property
-    def trans(self):
-        return self.__trans
-    
-    @trans.setter
-    def trans(self,conse):
-        self.__trans=conse
-    
-    
 
 class Transaction:
     
@@ -43,38 +17,38 @@ class Transaction:
 
 
 class Transactions:
+    var=0
     def __init__(self):
         self._transactions=[]
-    
-    def __consecutive(self, conse):
-        cons=Monto()
-        tempo=cons.trans
-        cons.trans=tempo+conse
         
         
     def typeTransaction(self, code, typeT, date, coin, count):
         price=Check_currency()
         precio=price.get_price(coin)
         valor=count*float(precio)   
-
-        monto=Monto()
+        
+        monto_accom=float(self._accomulator(8))
+        num_Transaccion=int(self._accomulator(0))
+        
         if typeT=="receives":
-            
-            monto.monto=monto.monto+valor
-            self.__consecutive(1)
-            transa=monto.trans
-            
-            
+            mont=monto_accom+valor
+            transa=num_Transaccion+1
             
         elif typeT=="send":
-            monto.monto=monto.monto+((-1.0)*valor)
-            self.__consecutive(1)
-            transa=monto.trans
+            mont=self.monto_accom+((-1.0)*valor)
+            transa=self.num_Transaccion+1
             
-        mont=monto.monto
         transaction=Transaction(transa, typeT, code, date, coin, precio, count, valor, mont)
         self._transactions.append(transaction)
         self._save()
+    
+    def _accomulator(self,i):
+        global var
+        lis= list(csv.reader(open('transacciones.csv', 'r')))
+        end_Line=lis[-1] # prints final line as a lis
+        for row in end_Line:
+            var=str(row[i])
+        return var
     
     def show_all(self):
         for i in self._transactions:
@@ -93,13 +67,6 @@ class Transactions:
         print('Monto a la fecha {}'.format(transaction.amount))
         print('*----*----*----*----*----*----*----*----*----*----*----*----*----*----*----*----*----*----*----*----*----*----*')
         
-    
-    def delete(self,code):
-        for indx, transaction in enumerate(self._transactions):
-            if transaction.trans==trans:
-                del self._transactions[indx]
-                self._save()
-                break
     
     def search(self, code):
         for transaction in self._transactions:

@@ -1,9 +1,7 @@
-
 import os
 import csv
 from datetime import *
 from transaction import *
-
 
 def run():
     transaction = Transactions()
@@ -45,6 +43,8 @@ def run():
                         |             TRANSFERIR MONTO                |         
                         |*********************************************|
                     \n''')
+                
+                
                 os.system("pause")
                 
             elif option == '3':

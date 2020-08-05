@@ -1,3 +1,5 @@
-N° Trans,Tipo Transaccion,Codigo Usuario,Fecha,Moneda,Precio Moneda,Cantidad,Valor Transado,Monto Acomulado
-0,receives,a456,04/08/2020 Hora: 21:40:40,BTC,11171.87000000,4.4568,49790.79021600001,49790.79021600001
-0,receives,A4688,04/08/2020 Hora: 21:40:40,LTC,57.20000000,78.335,4480.762,4480.762
+Nï¿½ Trans,Tipo Transaccion,Codigo Usuario,Fecha,Moneda,Precio Moneda,Cantidad,Valor Transado,Monto Acomulado
+
+0,receives,A5688,04/08/2020 Hora: 22:26:45,BTC,11188.61000000,7.8989,88377.71152900001,88377.71152900001
+
+
