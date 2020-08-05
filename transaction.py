@@ -1,17 +1,21 @@
 import csv
 from check_currency import *
 class Monto:
+    monto=0.0
+        
+        
     def __init__(self, amount=0.0, trans=0):
         self.__amount=amount
         self.__trans=trans
-    
+        
+        
     @property
     def amount(self):
         return self.__amount
-    
+        
     @amount.setter
     def amount(self, amount):
-        self.__amount=self.__amount+amount
+        self.__amount=amount
     
     @property
     def trans(self):
@@ -20,6 +24,7 @@ class Monto:
     @trans.setter
     def trans(self,conse):
         self.__trans=conse
+    
     
 
 class Transaction:
@@ -54,16 +59,19 @@ class Transactions:
 
         monto=Monto()
         if typeT=="receives":
-            mont=monto.amount=valor
+            
+            monto.monto=monto.monto+valor
             self.__consecutive(1)
             transa=monto.trans
+            
             
             
         elif typeT=="send":
-            mont=monto.amount=(-1.0)*valor
+            monto.monto=monto.monto+((-1.0)*valor)
             self.__consecutive(1)
             transa=monto.trans
             
+        mont=monto.monto
         transaction=Transaction(transa, typeT, code, date, coin, precio, count, valor, mont)
         self._transactions.append(transaction)
         self._save()
