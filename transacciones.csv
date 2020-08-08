@@ -1,5 +1,3 @@
-Nï¿½ Trans,Tipo Transaccion,Codigo Usuario,Fecha,Moneda,Precio Moneda,Cantidad,Valor Transado,Monto Acomulado
-
-0,receives,A5688,04/08/2020 Hora: 22:26:45,BTC,11188.61000000,7.8989,88377.71152900001,88377.71152900001
-
-
+N° Trans,Tipo Transaccion,Codigo Usuario,Fecha,Moneda,Precio Moneda,Cantidad,Valor Transado,Monto Acomulado
+1,receives,A546888,07/08/2020 Hora: 20:57:28,BTC,11633.44000000,23.6688995,275350.72219928,288219.43819928
+2,receives,A6886,07/08/2020 Hora: 21:19:50,BCC,448.70000000,78.666,35297.434199999996,323516.87239928
