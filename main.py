@@ -9,7 +9,7 @@ def run():
     check=Check_currency()
     now = datetime.now()
     fecha = now.strftime('%d/%m/%Y Hora: %H:%M:%S')
-    
+    check._save()
     #Abrimos el documento transacciones.csv y lo copiamos a en la lista que trabajaremos, para seguir la secuencia
     with open('transacciones.csv', 'r') as f:
         reader = csv.reader(f)
@@ -34,16 +34,15 @@ def run():
                         |   3 - Mostrar balance de moneda                                                   |
                         |   4 - Mostrar balance general                                                     |
                         |   5 - Mostrar historico de transacciones                                          |
-                        |   6 - Conocer simbolos de moneda                                                  |
-                        |   7 - Conocer precio de moneda para el dia                                        |
-                        |   8 - Salir del programa                                                          |
+                        |   6 - Conocer valor al día de criptomonedas                                       |
+                        |   7 - Salir del programa                                                          |
                         |***********************************************************************************|
                         \n''')
             
         if option == '1':
             print('''
                         |*********************************************|
-                        |             RECIBIR CANTIDAD                |         
+                        |          1-   RECIBIR CANTIDAD              |         
                         |*********************************************|
                     \n''')
             coinR = str(input("Indique la moneda que va a recibir: ")).upper()
@@ -54,79 +53,71 @@ def run():
                 print("Moneda recibida, transacción registrada")
             else:
                 print("Lo sentimos, no reconocemos esa moneda")
-                
             os.system("pause")
                 
         elif option == '2':
             print('''
                         |*********************************************|
-                        |             TRANSFERIR MONTO                |         
+                        |         2-    TRANSFERIR MONTO              |         
                         |*********************************************|
                     \n''')
-            coinS = str(input("Indique la moneda que va a enviar: ")).upper()
             
-            if check.esmoneda(coinS):
-                count = float(input('Indique la cantidad de moneda que desea transferir: '))
-                code = input('Indique el codigo de quien le desea enviar: ')
-                transaction.typeTransaction(code, "send", fecha, coinS, count)                
-                print("Moneda enviada, transacción registrada")
+            coinS = str(input("Indique la moneda que va a enviar: ")).upper()
+            if transaction.count_coin(coinS)>0:
+                if check.esmoneda(coinS):
+                    count = float(input('Indique la cantidad de moneda que desea transferir: '))
+                    code = input('Indique el codigo de quien le desea enviar: ')
+                    transaction.typeTransaction(code, "send", fecha, coinS, count)                
+                    print("Moneda enviada, transacción registrada")
+                else:
+                    print("Lo sentimos, no reconocemos esa moneda")
             else:
-                print("Lo sentimos, no reconocemos esa moneda")
-                
+                print("Lo sentimos, no tiene suficiente {} para realizar envios".format(coinS))
             os.system("pause")
             
         elif option == '3':
             print('''
                         |*********************************************|
-                        |         MOSTRAR BALANCE DE MONEDA           |         
+                        |     3-  MOSTRAR BALANCE POR CRIPTOMONEDA    |         
                         |*********************************************|
                     \n''')
             coin =str(input("Indique la moneda que quiere consultar: ")).upper()
             if check.esmoneda(coin):
-                searchCoin=transaction.searchCoin(coin)
-                print("Hasta la fecha usted tiene un balance de {}, en la moneda {}".format(searchCoin,coin))
+                valueCoin=transaction.value_coin(coin)
+                print("Hasta la fecha usted tiene un balance de {}, en la moneda {}".format(valueCoin,coin))
             else:
                 print("Lo sentimos, no reconocemos esa moneda")
-            
             os.system("pause")
+            
         elif option == '4':
             print('''
                         |*********************************************|
-                        |           MOSTRAR BALANCE GENERAL           |         
+                        |       4-    MOSTRAR BALANCE GENERAL         |         
                         |*********************************************|
                     \n''')
-            print(check.check_coin())
+            transaction.summary_coin()
             os.system("pause")
             
         elif option == '5':
             print('''
                         |*********************************************|
-                        |     MOSTRAR HISTORICO DE TRANSACCIONES      |        
+                        |  5-   MOSTRAR HISTORICO DE TRANSACCIONES    |        
                         |*********************************************|
                     \n''')
             transaction.show_all()
             os.system("pause")
             
+
         elif option == '6':
             print('''
                         |*********************************************|
-                        |        CONOCER SIMBOLOS DE MONEDAS          |         
+                        |   6-  CONOCER VALOR AL DÍA DE CRIPTOMONEDA  |         
                         |*********************************************|
                     \n''')
-            coi=input("Ingrese la moneda: ")
-            print(check.get_price2(coi))
+            check.name_symbol_price()
             os.system("pause")
             
         elif option == '7':
-            print('''
-                        |*********************************************|
-                        |      CONOCER VALOR DE MONEDA A LA FECHA     |         
-                        |*********************************************|
-                    \n''')
-            print(check.check_coin())
-            os.system("pause")
-            
-        elif option == '8':
             print('Saliendo...')
             break
         else:

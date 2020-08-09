@@ -1,34 +1,26 @@
-import requests
-from requests import Request, Session
-from requests.exceptions import ConnectionError, Timeout, TooManyRedirects
+
 import json
+import csv
+import requests
 
 class Check_currency:
     
     def __init__(self):
         self._monedas=[]
         self._monedas_dict={}
-        self._monedas2=[]
-        self._ENDPOINT = "https://api.binance.com"
         self.url = 'https://api.coinmarketcap.com/v1/ticker/'
         self.parameters ={'start':'1','limit':'5000', 'convert':'USD' }
         self.COINMARKET_API_KEY = "d4e571f9-65a3-46c7-af2b-310417d2e144"
         self.headers = {'Accepts': 'application/json',  'X-CMC_PRO_API_KEY': self.COINMARKET_API_KEY} 
-
-
     
-    def _url(self, api):
-        point= self._ENDPOINT + api
-        return point
-    
-    def get_price(self, cripto):
-        price=requests.get(self._url("/api/v3/ticker/price?symbol="+cripto+"USDT")).json()
-        return price['price']
-    
-    def get_price2(self, coin):
-        datos=[]
+    def data_json(self):
         data=requests.get("https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest", headers=self.headers, params=self.parameters)        
         data=data.json()
+        return data
+    
+    def get_price(self, coin):
+        datos=[]
+        data=self.data_json()
         for cripto in data['data']:
             if cripto['symbol'] == coin:
                 datos=cripto['quote']
@@ -36,22 +28,28 @@ class Check_currency:
             
     
     def check_coin(self):
-        data=requests.get("https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest", headers=self.headers, params=self.parameters).json()
+        data=self.data_json()
         for cripto in data["data"]:
-            self._monedas2.append(cripto["symbol"])
-        monedas = tuple(self._monedas2)
+            self._monedas.append(cripto["symbol"])
+        monedas = tuple(self._monedas)
         return (monedas)  
+        
+    def name_symbol_price(self):
+        lis= list(csv.reader(open('monedas.csv', 'r')))
+        for data in lis:
+            if len(data)==0:
+                continue
+            else:
+                print((data[1], data[2], data[5]))
+
             
-    def check_price(self,coin,element):
-        respuesta=requests.get(self.url+coin+'/')    
-        resp_json=respuesta.json()
-        print(resp_json[element])
-        
-    
-    
-            #self._monedas_dict[cripto["symbol"]]=cripto["name"]
-        #self._monedas = self._monedas_dict.keys()
-    
-        
+    def _save(self):
+        data=self.data_json()
+        with open('monedas.csv','w') as csvfile:
+            writer=csv.writer(csvfile)
+            writer.writerow(('id','name', 'symbol','slug', 'date_added','price'))
+            for value in data['data']:
+                writer.writerow((value['id'], value['name'], value['symbol'], value['slug'],value['date_added'], value['quote']['USD']['price']))       
+            
     def esmoneda(self, cripto):
         return cripto in self.check_coin()

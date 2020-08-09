@@ -25,7 +25,7 @@ class Transactions:
     #Se verifica tipo de traansacción si se recibe o se envia
     def typeTransaction(self, code, typeT, date, coin, count):
         price=Check_currency()
-        precio=price.get_price2(coin)
+        precio=price.get_price(coin)
         valor=count*float(precio)   
         
         monto_accom=float(self._accomulator(8))
@@ -35,7 +35,9 @@ class Transactions:
             transa=num_Transaccion+1
             
         elif typeT=="send":
-            mont=monto_accom+float((-1.0)*valor)
+            valor=float((-1.0)*valor)
+            count=float((-1.0)*count)
+            mont=monto_accom+valor
             transa=num_Transaccion+1
             
         self.addTransaction(transa, typeT, code, date, coin, precio, count, valor, mont)
@@ -50,7 +52,11 @@ class Transactions:
     def _accomulator(self,i):
         lis= list(csv.reader(open('transacciones.csv', 'r')))
         lon=(len(lis))
-        return lis[lon-2][i]
+        if len(lis) == 0:
+            value=0
+            return value
+        else:
+            return lis[lon-2][i]
     
     #Función para mostrar las transacciones que se han realizado
     def show_all(self):
@@ -69,19 +75,44 @@ class Transactions:
         print('valor operado {}'.format(transaction.value))
         print('Monto a la fecha {}'.format(transaction.amount))
         print('*----*----*----*----*----*----*----*----*----*----*----*----*----*----*----*----*----*----*----*----*----*----*')
-        
-    #Buscar la moneda y contar cuanto se tiene recolectado
-    def searchCoin(self, coin):
+
+    def list_coin(self):
+        monedas=[]
+        unicos=set([])
+        for coin in (self._transactions):
+            monedas.append(coin.coin)
+        for coin in monedas:
+            if coin not in unicos:
+                unicos.add(coin)
+        return unicos
+    
+    def summary_coin(self):
+        for coin in self.list_coin():
+            cantidad=self.count_coin(coin)
+            valor=self.value_coin(coin)
+            print("Usted tiene una cantidad de {} de moneda {}, el valor en USD es {} ".format(cantidad, coin, valor))
+        print("El monto acomulado que tiene a la fecha es de {} USD".format(self.accomulated_value()))
+    
+    #Buscar y contar cuanto tiene por moneda para ese momento 
+    def count_coin(self, coin):
+        cantidad=0.0
+        for moneda in self._transactions:
+            if moneda.coin == coin:
+                cantidad = cantidad + float(moneda.count)
+        return cantidad
+    
+    #Buscar la moneda y calcular que monto tiene por moneda para ese momento
+    def value_coin(self, coin):
         total=0.0
         counter=0
         for moneda in (self._transactions):
-            if moneda.coin==coin:
+            if moneda.coin == coin:
                 total = total + float(moneda.value)
-                counter= counter + 1
-        if counter==0:
+                counter = counter + 1
+        if counter == 0:
             self._not_found()        
         return total
-
+        
             
     def _not_found(self):
         print('''
@@ -89,9 +120,13 @@ class Transactions:
                     Moneda no encontrada
             ************************************
             ''')
-        
     
-    #Función para guardar transacciones en archivo csv
+    #Metodo para retornar el monto que tiene el cliente hasta la fecha
+    def accomulated_value(self):
+        amount=self._accomulator(8)
+        return amount
+    
+    #Metodo para guardar transacciones en archivo csv
     def _save(self):
         with open('transacciones.csv','w') as f:
             writer=csv.writer(f)   
